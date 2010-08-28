@@ -33,7 +33,7 @@ public class StoryDBO extends BasicDBObject implements DBO {
 
 	private static final long serialVersionUID = 3559937707272202397L;
 
-	private final static String URI_PROPERTY = "storyUri";
+	public final static String URI_PROPERTY = "storyUri";
 	private final static String STATE_PROPERTY = "state";
 	private final static String TITLE_PROPERTY = "title";
 	private final static String TEXT_PROPERTY = "text";
@@ -83,11 +83,10 @@ public class StoryDBO extends BasicDBObject implements DBO {
 	}
 	
 	public URI getImageUrl() {
-		String url = getString( IMAGE_URL_PROPERTY );
-		if ( Strings.isNullOrEmpty(url) ) {
-			return null;
+		if ( containsField( IMAGE_URL_PROPERTY ) ) {
+			return URI.create( getString( IMAGE_URL_PROPERTY ) );
 		}
-		return URI.create( url );
+		return null;
 	}
 	
 	public void setImageUrl( final URI imageUrl ) {
@@ -95,7 +94,11 @@ public class StoryDBO extends BasicDBObject implements DBO {
 	}
 	
 	public Double getRelevance() {
-		return Double.valueOf( getDouble( RELEVANCE_PROPERTY ) );
+		if ( containsField( RELEVANCE_PROPERTY ) ) {
+			return Double.valueOf( getDouble( RELEVANCE_PROPERTY ) );
+		} 
+		
+		return null;
 	}
 	
 	public void setRelevance( final Double relevance ) {

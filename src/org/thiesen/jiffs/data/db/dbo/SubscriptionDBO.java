@@ -35,8 +35,9 @@ public class SubscriptionDBO extends BasicDBObject implements DBO {
 	private final static String TITLE_PROPERTY = "title";
 	private final static String HTML_URL_PROPERTY = "htmlUrl";
 	private final static String XML_URL_PROPERTY = "xmlUrl";
-	private final static String STATE_PROPERTY = "state";
-	private final static String NEXT_CHECK = "nextCheck";
+	public final static String STATE_PROPERTY = "state";
+	public final static String NEXT_CHECK = "nextCheck";
+	public final static String LAST_CHECK = "lastCheck";
 	
 	
 	public SubscriptionState getState() {
@@ -77,5 +78,16 @@ public class SubscriptionDBO extends BasicDBObject implements DBO {
 	
 	public void setNextCheck( final DateTime nextCheck ) {
 		put( NEXT_CHECK , Long.valueOf( nextCheck.getMillis() ) );
+	}
+	
+	public DateTime getLastCheck() {
+		if ( containsField( LAST_CHECK ) ) {
+			return new DateTime( getLong( LAST_CHECK ) );
+		} 
+		return null;
+	}
+	
+	public void setLastCheck( final DateTime nextCheck ) {
+		put( LAST_CHECK , Long.valueOf( nextCheck.getMillis() ) );
 	}
 }

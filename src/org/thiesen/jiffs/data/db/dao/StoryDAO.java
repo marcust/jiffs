@@ -18,9 +18,24 @@
  *
  */
 
-package org.thiesen.jiffs.data.enums;
+package org.thiesen.jiffs.data.db.dao;
 
-public enum SubscriptionState {
+import java.net.URI;
 
-	SUBSCRIBED, PERMANENT_FAIL,
+import org.thiesen.jiffs.data.db.dao.common.AbstractDAO;
+import org.thiesen.jiffs.data.db.dbo.StoryDBO;
+
+import com.mongodb.BasicDBObject;
+
+public class StoryDAO extends AbstractDAO<StoryDBO> {
+
+	public StoryDAO() {
+		super( StoryDBO.class );
+	}
+
+	public StoryDBO findByUri(URI uri ) {
+		return findOne( new BasicDBObject( StoryDBO.URI_PROPERTY,  uri.toString() ) );
+		
+	}
+
 }

@@ -20,17 +20,32 @@
 
 package org.thiesen.jiffs.data.db.dao;
 
+import org.joda.time.DateTime;
 import org.thiesen.jiffs.data.db.dao.common.AbstractDAO;
 import org.thiesen.jiffs.data.db.dbo.SubscriptionDBO;
+import org.thiesen.jiffs.data.enums.SubscriptionState;
 import org.thiesen.jiffs.data.types.DAO;
+
+import com.mongodb.BasicDBObject;
 
 public class SubscriptionDAO extends AbstractDAO<SubscriptionDBO> implements DAO {
 
 	public SubscriptionDAO() {
 		super( SubscriptionDBO.class );
 	}
-	
-	
-	
-	
+
+	public Iterable<SubscriptionDBO> findNextCheckBefore(DateTime time) {
+		final BasicDBObject query = new BasicDBObject();
+
+		query.put( SubscriptionDBO.NEXT_CHECK, new BasicDBObject("$lt", Long.valueOf( time.getMillis() ) ) );
+		query.put( SubscriptionDBO.STATE_PROPERTY, SubscriptionState.SUBSCRIBED.toString() );
+
+		
+		return find( query );
+	}
+
+
+
+
+
 }

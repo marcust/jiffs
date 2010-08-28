@@ -25,11 +25,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.thiesen.jiffs.data.db.dbo.SubscriptionDBO;
 import org.thiesen.jiffs.data.types.DBO;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
@@ -61,6 +64,7 @@ public class AbstractDAO<T extends DBO & DBObject> {
 	public AbstractDAO(Class<T> dboClass ) {
 		_dboClass = dboClass;
 		_collection = DB_CONNECTION.getCollection( toCollectionName( dboClass ) );
+		_collection.setObjectClass( dboClass );
 	}
 
 	private static String toCollectionName(Class<? extends DBO> dboClass) {
@@ -82,5 +86,22 @@ public class AbstractDAO<T extends DBO & DBObject> {
 		insert.getLastError();
 	
 	}
+	
+	@SuppressWarnings("unchecked")
+	protected Iterable<T> find( final DBObject query ) {
+		final DBCursor cur = _collection.find(query);
+
+		return (Iterable<T>)cur;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected T findOne( final DBObject query ) {
+		return (T) _collection.findOne( query );
+	}
+	
+	public void update( final T value ) {
+		_collection.update( new BasicDBObject( "_id", value.get("_id") ),  value );
+	}
+
 	
 }

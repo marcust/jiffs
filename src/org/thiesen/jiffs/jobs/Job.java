@@ -18,9 +18,10 @@
  *
  */
 
-package org.thiesen.jiffs.data.enums;
+package org.thiesen.jiffs.jobs;
 
-public enum SubscriptionState {
+public interface Job {
 
-	SUBSCRIBED, PERMANENT_FAIL,
+	public void execute();
+	
 }
