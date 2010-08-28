@@ -54,4 +54,8 @@ public class StoryDAO extends AbstractDAO<StoryDBO> {
 		return findWithProperty( StoryDBO.PREPROCESSED_TEXT_PROPERTY );
 	}
 
+	public Iterable<StoryDBO> findWithoutFullPage() {
+		return findWithoutProperty( StoryDBO.FULLPAGE_PROPERTY );
+	}
+
 }

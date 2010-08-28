@@ -26,6 +26,7 @@ import org.thiesen.jiffs.data.db.dao.StoryDAO;
 import org.thiesen.jiffs.data.db.dao.SubscriptionDAO;
 import org.thiesen.jiffs.jobs.clusterer.Clusterer;
 import org.thiesen.jiffs.jobs.fetcher.FetcherJob;
+import org.thiesen.jiffs.jobs.fullpage.FullPageLoader;
 import org.thiesen.jiffs.jobs.language.LanguageIdentifyJob;
 import org.thiesen.jiffs.jobs.preprocessor.Preprocessor;
 
@@ -45,6 +46,7 @@ public class Main {
 		new LanguageIdentifyJob( storyDAO ).execute();
 		new Preprocessor( storyDAO ).execute();
 		new Clusterer( storyDAO, storyClusterDAO ).execute();
+		new FullPageLoader( storyDAO ).execute();
 		watch.stop();
 		
 		final long endAmount = storyDAO.countAll();

@@ -46,6 +46,7 @@ public class StoryDBO extends BasicDBObject implements DBO {
 	private final static String IMAGE_URL_PROPERTY = "imageUrl";
 	public final static String LANGUAGE_PROPERTY = "language";
 	public final static String PREPROCESSED_TEXT_PROPERTY = "preprocessedText";
+	public static final String FULLPAGE_PROPERTY = "fullPage";
 	
 	public URI getStoryUri() {
 		return URI.create( getString( URI_PROPERTY ) );
@@ -156,5 +157,17 @@ public class StoryDBO extends BasicDBObject implements DBO {
 		put( SOURCE_URI_PROPERTY , uri.toString() );
 	}
 	
+	@CheckForNull
+	public String getFullPage() {
+		if ( containsField( FULLPAGE_PROPERTY ) ) {
+			return getString( FULLPAGE_PROPERTY );
+		}
+		
+		return null;
+	}
+	
+	public void setFullPage( final String text ) {
+		put( FULLPAGE_PROPERTY, text );
+	}
 	
 }
