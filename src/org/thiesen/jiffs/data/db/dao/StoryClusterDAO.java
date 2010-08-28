@@ -20,38 +20,13 @@
 
 package org.thiesen.jiffs.data.db.dao;
 
-import java.net.URI;
-
 import org.thiesen.jiffs.data.db.dao.common.AbstractDAO;
-import org.thiesen.jiffs.data.db.dbo.StoryDBO;
+import org.thiesen.jiffs.data.db.dbo.StoryClusterDBO;
 
-import com.mongodb.BasicDBObject;
+public class StoryClusterDAO extends AbstractDAO<StoryClusterDBO> {
 
-public class StoryDAO extends AbstractDAO<StoryDBO> {
-
-	public StoryDAO() {
-		super( StoryDBO.class );
-	}
-
-	public StoryDBO findByUri(URI uri ) {
-		return findOne( new BasicDBObject( StoryDBO.URI_PROPERTY,  uri.toString() ) );
-		
-	}
-
-	public Iterable<StoryDBO> findWithoutLanguage() {
-		return findWithoutProperty( StoryDBO.LANGUAGE_PROPERTY );
-	}
-
-	public Iterable<StoryDBO> findWithoutPreprocesing() {
-		final BasicDBObject query = new BasicDBObject( StoryDBO.PREPROCESSED_TEXT_PROPERTY , doesNotExist() );
-		
-		query.put( StoryDBO.LANGUAGE_PROPERTY , exists() );
-		
-		return find( query );
-	}
-
-	public Iterable<StoryDBO> findForClustering() {
-		return findWithProperty( StoryDBO.PREPROCESSED_TEXT_PROPERTY );
+	public StoryClusterDAO() {
+		super( StoryClusterDBO.class );
 	}
 
 }

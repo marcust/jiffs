@@ -21,8 +21,10 @@
 package org.thiesen.jiffs.jobs;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.thiesen.jiffs.data.db.dao.StoryClusterDAO;
 import org.thiesen.jiffs.data.db.dao.StoryDAO;
 import org.thiesen.jiffs.data.db.dao.SubscriptionDAO;
+import org.thiesen.jiffs.jobs.clusterer.Clusterer;
 import org.thiesen.jiffs.jobs.fetcher.FetcherJob;
 import org.thiesen.jiffs.jobs.language.LanguageIdentifyJob;
 import org.thiesen.jiffs.jobs.preprocessor.Preprocessor;
@@ -32,6 +34,7 @@ public class Main {
 	public static void main( final String... args ) {
 		final SubscriptionDAO subscriptionDAO = new SubscriptionDAO();
 		final StoryDAO storyDAO = new StoryDAO();
+		final StoryClusterDAO storyClusterDAO = new StoryClusterDAO();
 		
 		final long startAmount = storyDAO.countAll();
 		
@@ -41,6 +44,7 @@ public class Main {
 		new FetcherJob( subscriptionDAO, storyDAO ).execute();
 		new LanguageIdentifyJob( storyDAO ).execute();
 		new Preprocessor( storyDAO ).execute();
+		new Clusterer( storyDAO, storyClusterDAO ).execute();
 		watch.stop();
 		
 		final long endAmount = storyDAO.countAll();

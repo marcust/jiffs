@@ -23,12 +23,14 @@ package org.thiesen.jiffs.jobs.preprocessor;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.de.GermanAnalyzer;
@@ -42,7 +44,6 @@ import org.thiesen.jiffs.jobs.Job;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
@@ -112,11 +113,13 @@ public class Preprocessor implements Job {
 			final TokenStream tokenStream = analyzer.reusableTokenStream( "dummy", new StringReader( cleanedText ) );
 			final TermAttribute termAtt = tokenStream.addAttribute( TermAttribute.class );
 
-			final List<String> tokens = Lists.newLinkedList();
+			final Collection<String> tokens = Sets.newHashSet();
 			while ( tokenStream.incrementToken() ) {
 				final String token = termAtt.term();
 
-				tokens.add( token );
+				if ( StringUtils.isNotBlank( token ) ) {
+					tokens.add( token );
+				}
 			}
 
 			final String tokenString = Joiner.on(',').join( tokens ) ;

@@ -25,12 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.thiesen.jiffs.data.db.dbo.StoryDBO;
-import org.thiesen.jiffs.data.db.dbo.SubscriptionDBO;
 import org.thiesen.jiffs.data.types.DBO;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -65,7 +62,7 @@ public class AbstractDAO<T extends DBO & DBObject> {
 	public AbstractDAO(Class<T> dboClass ) {
 		_dboClass = dboClass;
 		_collection = DB_CONNECTION.getCollection( toCollectionName( dboClass ) );
-		_collection.setObjectClass( dboClass );
+		_collection.setObjectClass( _dboClass );
 	}
 
 	private static String toCollectionName(Class<? extends DBO> dboClass) {
@@ -119,8 +116,13 @@ public class AbstractDAO<T extends DBO & DBObject> {
 	}
 
 	protected Iterable<T> findWithoutProperty( final String property ) {
+		return find( new BasicDBObject( property, doesNotExist() ) );
+	}
+	
+	protected Iterable<T> findWithProperty( final String property ) {
 		return find( new BasicDBObject( property, exists() ) );
 	}
+	
 	
 	protected DBObject exists() {
 		return exists( Boolean.TRUE );

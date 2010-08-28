@@ -140,6 +140,7 @@ public class SubscriptionFetcher implements Runnable {
 
 		final StoryDBO newDBO = new StoryDBO();
 
+		newDBO.setSourceUri( sourceUri );
 		newDBO.setStoryUri( parsedUri );
 		newDBO.setPublicationDate( new DateTime( entry.getPublishedDate() ) );
 		newDBO.setState( StoryState.NEW );

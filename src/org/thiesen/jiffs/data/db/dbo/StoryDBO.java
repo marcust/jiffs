@@ -36,6 +36,7 @@ public class StoryDBO extends BasicDBObject implements DBO {
 	private static final long serialVersionUID = 3559937707272202397L;
 
 	public final static String URI_PROPERTY = "storyUri";
+	public final static String SOURCE_URI_PROPERTY = "storyUri";
 	private final static String STATE_PROPERTY = "state";
 	private final static String TITLE_PROPERTY = "title";
 	private final static String TEXT_PROPERTY = "text";
@@ -146,5 +147,14 @@ public class StoryDBO extends BasicDBObject implements DBO {
 	public void setPreprocessedText( final String text ) {
 		put( PREPROCESSED_TEXT_PROPERTY, text );
 	}
+
+	public URI getSourceUri() {
+		return URI.create( getString( SOURCE_URI_PROPERTY ) );
+	}
+	
+	public void setSourceUri( final URI uri ) {
+		put( SOURCE_URI_PROPERTY , uri.toString() );
+	}
+	
 	
 }
