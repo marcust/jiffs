@@ -44,6 +44,7 @@ public class StoryDBO extends BasicDBObject implements DBO {
 	private final static String LINK_PROPERTY = "link";
 	private final static String IMAGE_URL_PROPERTY = "imageUrl";
 	public final static String LANGUAGE_PROPERTY = "language";
+	public final static String PREPROCESSED_TEXT_PROPERTY = "preprocessedText";
 	
 	public URI getStoryUri() {
 		return URI.create( getString( URI_PROPERTY ) );
@@ -131,6 +132,19 @@ public class StoryDBO extends BasicDBObject implements DBO {
 
 	public String getFullText() {
 		return getTitle() + " " + getText(); 
+	}
+	
+	@CheckForNull
+	public String getPreprocessedText() {
+		if ( containsField( PREPROCESSED_TEXT_PROPERTY ) ) {
+			return getString( PREPROCESSED_TEXT_PROPERTY );
+		}
+		
+		return null;
+	}
+	
+	public void setPreprocessedText( final String text ) {
+		put( PREPROCESSED_TEXT_PROPERTY, text );
 	}
 	
 }

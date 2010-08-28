@@ -20,10 +20,12 @@
 
 package org.thiesen.jiffs.jobs;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.thiesen.jiffs.data.db.dao.StoryDAO;
 import org.thiesen.jiffs.data.db.dao.SubscriptionDAO;
 import org.thiesen.jiffs.jobs.fetcher.FetcherJob;
 import org.thiesen.jiffs.jobs.language.LanguageIdentifyJob;
+import org.thiesen.jiffs.jobs.preprocessor.Preprocessor;
 
 public class Main {
 
@@ -31,8 +33,19 @@ public class Main {
 		final SubscriptionDAO subscriptionDAO = new SubscriptionDAO();
 		final StoryDAO storyDAO = new StoryDAO();
 		
+		final long startAmount = storyDAO.countAll();
+		
+		final StopWatch watch = new StopWatch();
+		
+		watch.start();
 		new FetcherJob( subscriptionDAO, storyDAO ).execute();
 		new LanguageIdentifyJob( storyDAO ).execute();
+		new Preprocessor( storyDAO ).execute();
+		watch.stop();
+		
+		final long endAmount = storyDAO.countAll();
+		
+		System.out.println("Took " + watch + " to get " + ( endAmount - startAmount ) + " new stories" );
 		
 	}
 	

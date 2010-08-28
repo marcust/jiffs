@@ -39,7 +39,13 @@ public class StoryDAO extends AbstractDAO<StoryDBO> {
 	}
 
 	public Iterable<StoryDBO> findWithoutLanguage() {
-		final BasicDBObject query = new BasicDBObject( StoryDBO.LANGUAGE_PROPERTY, new BasicDBObject( "$exists", Boolean.FALSE ) );
+		return findWithoutProperty( StoryDBO.LANGUAGE_PROPERTY );
+	}
+
+	public Iterable<StoryDBO> findWithoutPreprocesing() {
+		final BasicDBObject query = new BasicDBObject( StoryDBO.PREPROCESSED_TEXT_PROPERTY , doesNotExist() );
+		
+		query.put( StoryDBO.LANGUAGE_PROPERTY , exists() );
 		
 		return find( query );
 	}

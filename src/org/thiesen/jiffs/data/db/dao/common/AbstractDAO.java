@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.thiesen.jiffs.data.db.dbo.StoryDBO;
 import org.thiesen.jiffs.data.db.dbo.SubscriptionDBO;
 import org.thiesen.jiffs.data.types.DBO;
 
@@ -94,6 +95,20 @@ public class AbstractDAO<T extends DBO & DBObject> {
 		return (Iterable<T>)cur;
 	}
 	
+	protected long count( final DBObject query ) {
+		return _collection.count(query);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Iterable<T> findAll() {
+		final DBCursor cur = _collection.find();
+		return (Iterable<T>)cur;
+	}
+	
+	public long countAll() {
+		return _collection.count();
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected T findOne( final DBObject query ) {
 		return (T) _collection.findOne( query );
@@ -103,5 +118,21 @@ public class AbstractDAO<T extends DBO & DBObject> {
 		_collection.update( new BasicDBObject( "_id", value.get("_id") ),  value );
 	}
 
+	protected Iterable<T> findWithoutProperty( final String property ) {
+		return find( new BasicDBObject( property, exists() ) );
+	}
+	
+	protected DBObject exists() {
+		return exists( Boolean.TRUE );
+	}
+
+	protected DBObject doesNotExist() {
+		return exists( Boolean.FALSE );
+	}
+	
+	private DBObject exists(Boolean exists ) {
+		return new BasicDBObject( "$exists", exists );
+	}
+	
 	
 }
