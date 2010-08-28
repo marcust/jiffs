@@ -5,5 +5,5 @@ build
 .ant-targets-build.xml
 .fbprefs
 .settings
-bin
+eclipse-bin
 
