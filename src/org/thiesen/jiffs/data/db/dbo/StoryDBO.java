@@ -22,11 +22,13 @@ package org.thiesen.jiffs.data.db.dbo;
 
 import java.net.URI;
 
+import javax.annotation.CheckForNull;
+
 import org.joda.time.DateTime;
 import org.thiesen.jiffs.data.enums.StoryState;
 import org.thiesen.jiffs.data.types.DBO;
 
-import com.google.common.base.Strings;
+import com.google.api.translate.Language;
 import com.mongodb.BasicDBObject;
 
 public class StoryDBO extends BasicDBObject implements DBO {
@@ -41,6 +43,7 @@ public class StoryDBO extends BasicDBObject implements DBO {
 	private final static String PUBLICATION_DATE_PROPERTY = "publicationDate";
 	private final static String LINK_PROPERTY = "link";
 	private final static String IMAGE_URL_PROPERTY = "imageUrl";
+	public final static String LANGUAGE_PROPERTY = "language";
 	
 	public URI getStoryUri() {
 		return URI.create( getString( URI_PROPERTY ) );
@@ -82,6 +85,7 @@ public class StoryDBO extends BasicDBObject implements DBO {
 		put( LINK_PROPERTY , link.toString() );
 	}
 	
+	@CheckForNull
 	public URI getImageUrl() {
 		if ( containsField( IMAGE_URL_PROPERTY ) ) {
 			return URI.create( getString( IMAGE_URL_PROPERTY ) );
@@ -93,6 +97,7 @@ public class StoryDBO extends BasicDBObject implements DBO {
 		put( IMAGE_URL_PROPERTY , imageUrl.toString() );
 	}
 	
+	@CheckForNull
 	public Double getRelevance() {
 		if ( containsField( RELEVANCE_PROPERTY ) ) {
 			return Double.valueOf( getDouble( RELEVANCE_PROPERTY ) );
@@ -111,6 +116,21 @@ public class StoryDBO extends BasicDBObject implements DBO {
 	
 	public void setPublicationDate( final DateTime publicationDate ) {
 		put( PUBLICATION_DATE_PROPERTY , Long.valueOf( publicationDate.getMillis() ) );
+	}
+	
+	public @CheckForNull Language getLanguage() {
+		if ( containsField( LANGUAGE_PROPERTY ) ) {
+			return Language.fromString( getString( LANGUAGE_PROPERTY ) );
+		}
+		return null;
+	}
+	
+	public void setLanguage( final Language language ) {
+		put( LANGUAGE_PROPERTY, language.toString() );
+	}
+
+	public String getFullText() {
+		return getTitle() + " " + getText(); 
 	}
 	
 }

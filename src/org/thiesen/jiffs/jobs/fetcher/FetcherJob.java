@@ -37,6 +37,7 @@ public class FetcherJob implements Job {
 		
 		job.execute();
 	}
+	
 	private final static ExecutorService EXECUTOR = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() );
 	
 	private final SubscriptionDAO _subscriptionDAO;

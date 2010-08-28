@@ -22,6 +22,8 @@ package org.thiesen.jiffs.data.db.dbo;
 
 import java.net.URI;
 
+import javax.annotation.CheckForNull;
+
 import org.joda.time.DateTime;
 import org.thiesen.jiffs.data.enums.SubscriptionState;
 import org.thiesen.jiffs.data.types.DBO;
@@ -80,7 +82,7 @@ public class SubscriptionDBO extends BasicDBObject implements DBO {
 		put( NEXT_CHECK , Long.valueOf( nextCheck.getMillis() ) );
 	}
 	
-	public DateTime getLastCheck() {
+	public @CheckForNull DateTime getLastCheck() {
 		if ( containsField( LAST_CHECK ) ) {
 			return new DateTime( getLong( LAST_CHECK ) );
 		} 

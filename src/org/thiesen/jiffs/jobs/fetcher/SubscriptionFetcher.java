@@ -146,6 +146,8 @@ public class SubscriptionFetcher implements Runnable {
 		newDBO.setTitle( entry.getTitle() );
 		if ( entry.getDescription() != null ) {
 			newDBO.setText( entry.getDescription().getValue() );
+		} else {
+			newDBO.setText( "" );
 		}
 		try {
 			newDBO.setLinkUri( URI.create( StringUtils.trim( entry.getLink() ) ) );

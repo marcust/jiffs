@@ -18,30 +18,23 @@
  *
  */
 
-package org.thiesen.jiffs.data.db.dao;
+package org.thiesen.jiffs.jobs;
 
-import java.net.URI;
+import org.thiesen.jiffs.data.db.dao.StoryDAO;
+import org.thiesen.jiffs.data.db.dao.SubscriptionDAO;
+import org.thiesen.jiffs.jobs.fetcher.FetcherJob;
+import org.thiesen.jiffs.jobs.language.LanguageIdentifyJob;
 
-import org.thiesen.jiffs.data.db.dao.common.AbstractDAO;
-import org.thiesen.jiffs.data.db.dbo.StoryDBO;
+public class Main {
 
-import com.mongodb.BasicDBObject;
-
-public class StoryDAO extends AbstractDAO<StoryDBO> {
-
-	public StoryDAO() {
-		super( StoryDBO.class );
-	}
-
-	public StoryDBO findByUri(URI uri ) {
-		return findOne( new BasicDBObject( StoryDBO.URI_PROPERTY,  uri.toString() ) );
+	public static void main( final String... args ) {
+		final SubscriptionDAO subscriptionDAO = new SubscriptionDAO();
+		final StoryDAO storyDAO = new StoryDAO();
+		
+		new FetcherJob( subscriptionDAO, storyDAO ).execute();
+		new LanguageIdentifyJob( storyDAO ).execute();
 		
 	}
-
-	public Iterable<StoryDBO> findWithoutLanguage() {
-		final BasicDBObject query = new BasicDBObject( StoryDBO.LANGUAGE_PROPERTY, new BasicDBObject( "$exists", Boolean.FALSE ) );
-		
-		return find( query );
-	}
-
+	
+	
 }
