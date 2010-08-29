@@ -61,10 +61,7 @@ public class ClusterFinder implements Runnable {
 	}
 
 	private void findCluster() {
-		if ( _firstItem == _secondItem ) {
-			return;
-		}
-		
+
 		final double similarity = computeSimilarity();
 		
 		if ( similarity >= Clusterer.BASE_SIMILARITY ) {

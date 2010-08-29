@@ -21,6 +21,7 @@
 package org.thiesen.jiffs.jobs.clusterer;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -96,15 +97,19 @@ public class Clusterer implements Job {
 		
 		final Map<String, Long> foundClusters = Maps.newConcurrentMap();
 		final Semaphore maxEnqueedTasks = new Semaphore( 100000 );
-		final List<ClusterItem> clusterItems = Lists.newArrayList( transform( unprocessed ) );
-		for ( final ClusterItem firstItem : clusterItems ) {
+		final List<ClusterItem> clusterItems = Lists.newLinkedList( transform( unprocessed ) );
+		final Iterator<ClusterItem> firstIterator = clusterItems.iterator();
+		while ( firstIterator.hasNext() ) {
+			final ClusterItem firstItem = firstIterator.next();
 			for ( final ClusterItem secondItem : clusterItems ) {
-				EXECUTOR.submit( new ClusterFinder( maxEnqueedTasks,foundClusters, firstItem, secondItem )  );
+				if ( firstItem == secondItem ) {
+					continue;
+				}
+				EXECUTOR.submit( new ClusterFinder( maxEnqueedTasks, foundClusters, firstItem, secondItem )  );
 				maxEnqueedTasks.acquireUninterruptibly();
-				
 			}
+			firstIterator.remove();
 		}
-		clusterItems.clear();
 		
 		EXECUTOR.shutdown();
 		
